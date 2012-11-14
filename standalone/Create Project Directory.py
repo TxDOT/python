@@ -89,8 +89,6 @@ def proj_Menu():
     msg5 = "Would you like to begin?"
     choices5 = ["Yes", "No"]
     startFile = buttonbox(msg5, choices = choices5)
-    mxdTemplate = r'T:\DATAMGT\MAPPING\Personal Folders\David H\Scripts\_Templates\Letter 8.5x11\_Minute Order Base Map Portrait_8.5x11_DavidH.mxd'
-    newMXD = (folderMaps + "\\" + projName + ".mxd")
     
     #Confirm begin editing
     if startFile == "Yes":
@@ -101,6 +99,17 @@ def proj_Menu():
         #Confirm create new mxd
         if createMXD == "Yes":
             
+            msg11 = "Portrait or Landscape?"
+            choices11 = ["Portrait", "Landscape"]
+            ask_orientation = buttonbox(msg11, choices=choices11)
+            
+            msg12 = "Choose a Size"
+            choices12 = ["8.5 X 11", "11 X 17"]
+            ask_size = multchoicebox(msg12, choices = choices12)
+            
+            mxdTemplate = r'T:\DATAMGT\MAPPING\Personal Folders\David H\Scripts\_Templates' + os.sep + ask_orientation + os.sep + ask_size + '.mxd'
+            newMXD = (folderMaps + "\\" + projName + ".mxd")
+                
             #Define standard layers
             lyrRoadways = arcpy.mapping.Layer(r"T:\DATAMGT\MAPPING\Personal Folders\David H\Scripts\_Templates\Layers\TXDOT_Roadways.lyr")
             lyrDistricts = arcpy.mapping.Layer(r"T:\DATAMGT\MAPPING\Personal Folders\David H\Scripts\_Templates\Layers\Districts.lyr")
