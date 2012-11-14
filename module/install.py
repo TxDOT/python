@@ -1,5 +1,7 @@
 from distutils.core import setup
-setup(name='tx',
+# Install TX Module
+setup(
+	name='tx',
 	version='1.0',
 	description='TxDOT Python Productivity Tools for TPP-GIS',
 	author='TPP-GIS',
@@ -8,7 +10,7 @@ setup(name='tx',
 	py_modules=['tx'],
 	)
 
-# Easy GUI Dependency
+# Install Easy GUI Dependency
 setup(
     name='easygui',
     version='0.96',
