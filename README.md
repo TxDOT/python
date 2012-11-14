@@ -1,4 +1,3 @@
-
 ![Texas Department of Transportation](https://github.com/TxDOT/python/blob/master/TxDOT_small.png?raw=true)
 ----------
 #PYTHON RESOURCES#
@@ -6,7 +5,7 @@
 
 ----------
 
-## How to Install the "**tx**" module##
+## How to Install the **tx** module##
 	
 > Open the **module** folder. Inside, there is a file named **install.py**, you can run it by double-clicking on the file. The module will automatically install itself, and any depnendancies.
 
