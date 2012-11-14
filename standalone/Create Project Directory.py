@@ -58,6 +58,11 @@ def proj_Menu():
     choices4 = ["Yes", "No"]
     ansPlan = buttonbox(msg4, choices=choices4)
     
+#Ask user for a project description
+    msg10 = "Please enter a short description of the project."
+    title10 = "Metadata"
+    txtSummary = textbox(msg10, title10)
+    
 #Create folder directory
     folderPDF = (path + "\\" + projName + "\PDF")
     folderGeoData = (path + "\\" + projName + "\Geographic Data")
@@ -115,7 +120,6 @@ def proj_Menu():
             addLayers = multchoicebox(msg9, choices = choices9)
             
             #Open new mxd and add selected layers
-            os.startfile(newMXD)
             if choices9[0] in addLayers:
                 arcpy.mapping.AddLayer(df, lyrRoadways)
             if choices9[1] in addLayers:
@@ -126,6 +130,16 @@ def proj_Menu():
                 arcpy.mapping.AddLayer(df, lyrCity)
                 
             #Refresh mxd and save with added layers
+            mapID = int(time.time())
+            txtMapID = arcpy.mapping.ListLayoutElements(mxd, "TEXT_ELEMENT", "txtMapID")[0]
+            txtMapID.text = mapID
+            
+            #Add metadata information to the Map Document Properties
+            mxd.author = userName
+            mxd.summary = txtSummary
+            mxd.credits = 'TPP-GIS'
+            mxd.tags = str(mapID)
+            
             arcpy.RefreshActiveView()
             mxd.save()
             
@@ -143,7 +157,7 @@ def proj_Menu():
     
 #Record directory creation in general log
     with open(logFile, "a") as log:
-        log.write("\n" + time.ctime() + ", " + userName + ", " + projName + ", " + projDirectory)
+        log.write("\n" + str(mapID) + ", " + time.ctime() + ", " + userName + ", " + projName + ", " + projDirectory + ", " + txtSummary)
         
 #Create a log file specifically for minute orders
 #Change the location of the Minute Order log file here:
@@ -151,5 +165,5 @@ def proj_Menu():
     
 #Log minute order specifics into Minute Order log file
     with open(moLogFile, "a") as log:
-        log.write("\n" + time.ctime() + ", " + moChange + ", " + userName + ", " + projName + ", " + projDirectory)
+        log.write("\n" + str(mapID) + ", " + time.ctime() + ", " + moChange + ", " + userName + ", " + projName + ", " + projDirectory+ ", " + txtSummary)
 proj_Menu()

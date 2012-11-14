@@ -1,8 +1,3 @@
-class input:
-	def __init__(self, label, type):
-		"""The label for the input field, the expected type (folder, string, number, etc)"""
-		return
-	
 def updateFile(oldFile, newFile, backupFileFolder,):
 	"""Full path to old file, Full path to new file, Full path to backup folder."""
 	
