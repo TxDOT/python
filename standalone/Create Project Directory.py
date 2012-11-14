@@ -105,9 +105,9 @@ def proj_Menu():
             
             msg12 = "Choose a Size"
             choices12 = ["8.5 X 11", "11 X 17"]
-            ask_size = multchoicebox(msg12, choices = choices12)
+            ask_size = choicebox(msg12, choices = choices12)
             
-            mxdTemplate = r'T:\DATAMGT\MAPPING\Personal Folders\David H\Scripts\_Templates' + os.sep + ask_orientation + os.sep + ask_size + '.mxd'
+            mxdTemplate = (r'T:\DATAMGT\MAPPING\Personal Folders\David H\Scripts\_Templates' + os.sep + ask_orientation + os.sep + ask_size + '.mxd')
             newMXD = (folderMaps + "\\" + projName + ".mxd")
                 
             #Define standard layers
