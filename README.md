@@ -1,5 +1,23 @@
-TxDOT Script Resources
-=====
+# TxDOT Python Script Resources #
 
-Notice:
- 	***Scripts are also availble for use on an "as is" basis. Offical licence will be attached soon and should be considered valid for all file versions.*** 
+----------
+
+## How to Install the "**tx**" module##
+	
+> Open the **module** folder. Inside, there is a file named **install.py**, you can run it by double-clicking on the file. The module will automatically install itself, and any depnendancies.
+
+
+## How to run the **standalone** scripts ##
+
+> Open the **standalone** folder. Scripts within this folder are ready to be run by **double clicking** on them, or from the console (sometimes with arguments).  *They do not need to be run from within ArcGIS*.
+
+----------
+
+Script Requirements
+- **Windows**
+- **ArcGIS 10.***
+- **Python 2.6(or greater)**
+
+----------
+
+***Scripts and Modules are also availble for use on an "as is" basis. Depandencies are property of their creators, not TxDOT or TPP. Offical licence will be attached soon and should be considered valid for all files and revisions.*** 
