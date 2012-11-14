@@ -1,9 +1,5 @@
 ![Texas Department of Transportation](https://github.com/TxDOT/python/blob/master/TxDOT_small.png?raw=true)
 ----------
-#PYTHON RESOURCES#
-
-
-----------
 
 ## How to Install the **tx** module##
 	
