@@ -13,8 +13,8 @@
 
 ----------
 
-Script Requirements
-- **Windows**
+System Requirements
+- **Windows Only**
 - **ArcGIS 10.***
 - **Python 2.6(or greater)**
 
