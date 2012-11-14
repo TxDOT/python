@@ -1,4 +1,8 @@
-# TxDOT Python Script Resources #
+
+![Texas Department of Transportation](https://github.com/TxDOT/python/blob/master/TxDOT_small.png?raw=true)
+----------
+#PYTHON RESOURCES#
+
 
 ----------
 
@@ -21,3 +25,5 @@ System Requirements
 ----------
 
 ***Scripts and Modules are also availble for use on an "as is" basis. Depandencies are property of their creators, not TxDOT or TPP. Offical licence will be attached soon and should be considered valid for all files and revisions.*** 
+
+11:25 AM Wednesday, November 14, 2012
