@@ -3,7 +3,7 @@
 
 ## How to Install the **tx** module##
 	
-> Open the **module** folder. Inside, there is a file named **install.py**, you can run it by double-clicking on the file. The module will automatically install itself, and any depnendancies.
+> Open the **module** folder. Inside, there is a file named **install.py**, you can run it by double-clicking on the file. The module will automatically install itself, and any dependencies.
 
 
 ## How to run the **standalone** scripts ##
