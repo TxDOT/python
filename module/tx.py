@@ -43,10 +43,10 @@ def Project_Menu():
     ansMenu = raw_input("What type of project are you creating?\n\n 1 - Data Transmittal\n 2 - Minute Order\n 3 - Special Map\n 4 - Training Map\n 5 - Other Location\n\nEnter Selection: ")
     if ansMenu == '1':
         tmYR = str(time.localtime()[0])
-        path = (r"T:\DATAMGT\MAPPING\Data Transmittals" + "\\" + tmYR)
+        path = ("T:\\DATAMGT\MAPPING\\Data Transmittals" + os.sep + tmYR)
     elif ansMenu == '2':
         tmYR = str(time.localtime()[0])
-        path = (r"T:\DATAMGT\MAPPING\Special Maps" + "\\" + tmYR + "\Minute Orders")
+        path = ("T:\\DATAMGT\\MAPPING\\Special Maps" + os.sep + tmYR + "\\Minute Orders")
         moType = raw_input("\nWhat's the intent of the Minute Order?\n\n 1 - New Designation\n 2 - Re-Designation\n 3 - Proposed Highway\n 4 - Removal\n\nEnter Selection: ")
         if moType == '1':
             moChange = "New Designation"
@@ -58,9 +58,9 @@ def Project_Menu():
             moChange = "Removal"
     elif ansMenu == '3':
         tmYR = str(time.localtime()[0])
-        path = (r"T:\DATAMGT\MAPPING\Special Maps" + "\\" + tmYR)
+        path = ("T:\\DATAMGT\\MAPPING\\Special Maps" + os.sep + tmYR)
     elif ansMenu == '4':
-        path = r"T:\DATAMGT\MAPPING\Training"
+        path = "T:\\DATAMGT\\MAPPING\\Training"
     else:
         path = raw_input("\nWhat is the filepath of your working directory?\n\nPath: ")   
 # Name the project
@@ -68,14 +68,14 @@ def Project_Menu():
 # Ask for a project plan
     ansPlan = raw_input("\nWould you like to include a project plan? \n\nY or N: ")
 # Create folder directory
-    folderPDF = (path + "\\" + projName + "\PDF")
-    folderGeoData = (path + "\\" + projName + "\Geographic Data")
-    folderScripts = (path + "\\" + projName + "\Scripts")
-    folderMaps = (path + "\\" + projName + "\Maps")
-    folderDoc = (path + "\\" + projName + "\Documentation")
+    folderPDF = (path + os.sep + projName + os.sep + "PDF")
+    folderGeoData = (path + os.sep + projName + os.sep + "Geographic Data")
+    folderScripts = (path + os.sep + projName + os.sep + "Scripts")
+    folderMaps = (path + os.sep + projName + os.sep + "Maps")
+    folderDoc = (path + os.sep + projName + os.sep + "Documentation")
 # Change the location of the Project Template here:
     projTemp = r"T:\DATAMGT\MAPPING\Personal Folders\David H\Scripts\ProjectTemplate.doc"
-    newProjPlan = (folderDoc + "\\" + projName + ".doc")
+    newProjPlan = (folderDoc + os.sep + projName + ".doc")
     folderList = [folderPDF,folderGeoData,folderScripts,folderMaps,folderDoc]
     for x in folderList:
         if not os.path.exists(x):
@@ -85,13 +85,13 @@ def Project_Menu():
     else:
         pass
     print " "
-    projDirectory = (path + "\\" + projName)
+    projDirectory = (path + os.sep + projName)
     print projDirectory
 # Open the file directory in Windows Explorer
     os.startfile(projDirectory)
 # Modify or create (if not existing) a general log file for all logged projects
 # Change the location of the general log file here:
-    logFile = r"T:\\DATAMGT\\MAPPING\\Personal Folders\\David H\\Scripts\\ProjectLogFile.txt"
+    logFile = "T:\\DATAMGT\\MAPPING\\Personal Folders\\David H\\Scripts\\ProjectLogFile.txt"
 # Collect user name information
     userName = (os.path.expanduser("~/"))[9:16]
 # Record directory creation in general log
@@ -99,7 +99,7 @@ def Project_Menu():
         log.write("\n" + time.ctime() + ", " + userName + ", " + projName + ", " + projDirectory)
 # Create a log file specifically for minute orders
 # Change the location of the Minute Order log file here:
-    moLogFile = r"T:\\DATAMGT\\MAPPING\\Personal Folders\\David H\\Scripts\\MinuteOrderProjectLogFile.txt"
+    moLogFile = "T:\\DATAMGT\\MAPPING\\Personal Folders\\David H\\Scripts\\MinuteOrderProjectLogFile.txt"
 # Log minute order specifics into Minute Order log file
     with open(moLogFile,"a") as log:
         log.write("\n" + time.ctime() + ", " + moChange + ", " + userName + ", " + projName + ", " + projDirectory)
