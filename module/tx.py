@@ -105,7 +105,9 @@ def Project_Menu():
         log.write("\n" + time.ctime() + ", " + moChange + ", " + userName + ", " + projName + ", " + projDirectory)
 
 def archiveComanche(path):
-    """Argument is local output path"""
+    """
+    Argument is local output path
+    """
     from arcpy import env
     import arcpy
     import getpass
