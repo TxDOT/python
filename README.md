@@ -1,4 +1,4 @@
-![Texas Department of Transportation](https://github.com/TxDOT/python/blob/master/TxDOT_small.png?raw=true)
+![Texas Department of Transportation](https://github.com/TxDOT/python/blob/master/TxDOT_small.emf?raw=true)
 ----------
 
 ## How to Install the **tx** module##
