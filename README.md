@@ -1,4 +1,4 @@
-![Texas Department of Transportation](https://github.com/TxDOT/python/blob/master/TxDOT_small.png?raw=true)
+![Texas Department of Transportation](https://github.com/TxDOT/python/blob/master/TxDOT.png?raw=true)
 ----------
 
 ## How to Install the **tx** module##
@@ -19,6 +19,6 @@ System Requirements
 
 ----------
 
-***Scripts and Modules are also availble for use on an "as is" basis. Depandencies are property of their creators, not TxDOT or TPP. Offical licence will be attached soon and should be considered valid for all files and revisions.*** 
+***Scripts and Modules are also available for use on an "as is" basis. Depandencies are property of their creators, not TxDOT or TPP. Offical licence will be attached soon and should be considered valid for all files and revisions.***
 
 Updated October 9, 2013
