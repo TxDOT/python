@@ -1,4 +1,4 @@
-def archive():
+def txArchive():
     """
     Create an archive of your MyModules script and push the working script to the main folder.
     """
@@ -17,7 +17,7 @@ def archive():
     del archiveTime
     del archive
     
-def Checklist(directory,extension='All'):
+def fileChecklist(directory,extension='All'):
     """
     Create a checklist file in "txt" format for any folder - list all files by name.
     """
@@ -34,7 +34,7 @@ def Checklist(directory,extension='All'):
     file1.close()
     print 'Done!'
 
-def Project_Menu():
+def projectMenu():
     """
     Through a defined menu, allows a user to select a project category, create a new folder, and optionally add a project plan document.
     """
