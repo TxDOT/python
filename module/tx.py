@@ -16,7 +16,7 @@ def txArchive():
     del workingCopy
     del archiveTime
     del archive
-    
+
 def fileChecklist(directory,extension='All'):
     """
     Create a checklist file in "txt" format for any folder - list all files by name.
@@ -62,7 +62,7 @@ def projectMenu():
     elif ansMenu == '4':
         path = "T:\\DATAMGT\\MAPPING\\Training"
     else:
-        path = raw_input("\nWhat is the filepath of your working directory?\n\nPath: ")   
+        path = raw_input("\nWhat is the filepath of your working directory?\n\nPath: ")
 # Name the project
     projName = raw_input("\nWhat is the project name?: ")
 # Ask for a project plan
@@ -131,9 +131,9 @@ def archiveComanche(path):
     print "Creating New File Geodatabase..."
     arcpy.CreateFileGDB_management(outputWorkspace,"Archive" + formatTime,"10.0")
     outputPath = outputWorkspace + "Archive" + formatTime + ".gdb"
-    
+
     copyFiles = ["TPP_GIS.MCHAMB1.Roadways\\TPP_GIS.MCHAMB1.TXDOT_Roadways","TPP_GIS.MCHAMB1.RTE_CONCURRENT","TPP_GIS.MCHAMB1.RTE_CONTROL_SECTION","TPP_GIS.MCHAMB1.SUBFILES"]
-    
+
     for file in copyFiles:
         if file == "TPP_GIS.MCHAMB1.Roadways\\TPP_GIS.MCHAMB1.TXDOT_Roadways":
             fileName = file.split(".")[4]
@@ -155,10 +155,10 @@ def rte_concatenate(table, group_field="RTE_ID", from_field="FROM_DFO", to_field
     to the same linear segment. Optionally, checks for overlapping measures.
 
     Example 1:
-    route_concatenate("C:\\Test.gdb\\test")
+    rte_concatenate("C:\\Test.gdb\\test")
 
     Example 2:
-    route_concatenate("C:\\Test.gdb\\test", "Route_ID", "FRM_Mea", "TO_Mea", "Concat", True, "Overlap")
+    rte_concatenate("C:\\Test.gdb\\test", "Route_ID", "FRM_Mea", "TO_Mea", "Concat", True, "Overlap")
 
     Args:
         table_name (str): Full path to the route table
