@@ -183,7 +183,7 @@ def rte_concatenate(table, group_field="RTE_ID", from_field="FROM_DFO", to_field
 
     # Add field for marking overlap if specified by user
     if mark_overlap is True:
-        add_field_list.append("overlap_field_name")
+        add_field_list.append(overlap_field_name)
 
     # Iterate through table, checking if the add field already exist
     for field in field_list:
