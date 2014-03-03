@@ -112,13 +112,15 @@ def projectMenu():
         log.write("\n" + time.ctime() + ", " + moChange + ", " + userName + ", " + projName + ", " + projDirectory)
 
 
-def archiveComanche(path):
+def archiveComanche(output_path, db_connection):
     """
     Argument is local output path
+    Args:
+        output_path (str): Full path to the output folder
+        db_connection
     """
     from arcpy import env
     import arcpy
-    import getpass
     import os
     import time
 
@@ -131,10 +133,9 @@ def archiveComanche(path):
             element = element.replace(":", "_")
         formatTime = formatTime + "_" + element
 
-    userName = getpass.getuser()
-    env.workspace = "C:\\_SMA\\C\\Users\\" + userName + "\\AppData\\Roaming\\ESRI\\Desktop10.0\\ArcCatalog\\Connection to Comanche.sde"
+    env.workspace = db_connection
 
-    outputWorkspace = path
+    outputWorkspace = output_path
 
     print "Creating New File Geodatabase..."
     arcpy.CreateFileGDB_management(outputWorkspace, "Archive" + formatTime, "10.0")
