@@ -132,7 +132,7 @@ def archiveComanche(path):
         formatTime = formatTime + "_" + element
 
     userName = getpass.getuser()
-    env.workspace = "C:\\Users\\" + userName + "\\AppData\\Roaming\\ESRI\\Desktop10.0\\ArcCatalog\\Connection to Comanche.sde"
+    env.workspace = "C:\\_SMA\\C\\Users\\" + userName + "\\AppData\\Roaming\\ESRI\\Desktop10.0\\ArcCatalog\\Connection to Comanche.sde"
 
     outputWorkspace = path
 
