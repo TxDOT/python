@@ -12,7 +12,7 @@ __author__ = 'ABREZNIC'
 #
 #This is an independent script which requires a single parameter designating a directory.
 #The script will walk through each subfolder and file within the designated directory, identifying the MXD files
-#and re-sourcing the Comanche database connections to utilize the new 'Admin' prefix/account
+#and re-sourcing the Comanche database connections to utilize the new 'Admin' prefix
 #
 #
 #
