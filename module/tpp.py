@@ -269,5 +269,30 @@ def rte_concatenate(table, group_field="RTE_ID", from_field="FROM_DFO", to_field
         print counter
 
     del row, rows
+
+    if mark_overlap is True:
+        print "Completing Overlap Processing..."
+        markOverlaps(table, overlap_field_name, from_field)
+
     end_time = time.time()
     print "Elapsed time: {0}".format(time.strftime('%H:%M:%S', time.gmtime(end_time - start_time)))
+
+
+def markOverlaps(table, overlap_field_name, from_field):
+    """
+    Marks the other half of duplicates in a route event table.
+    """
+    marker = 0
+    sort_string = str("{0} A; {1} D".format(overlap_field_name, from_field))
+    rows = arcpy.UpdateCursor(table, "", "", "", sort_string)
+
+    for row in rows:
+        if row.getValue(overlap_field_name) == 1:
+            marker = 1
+        elif marker == 1 and row.getValue(overlap_field_name) == 0:
+            row.setValue(overlap_field_name) = 1
+            marker = 0
+        else:
+            pass
+        rows.updateRow(row)
+    del row, rows

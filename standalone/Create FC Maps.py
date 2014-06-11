@@ -20,7 +20,7 @@ for row in cursor:
 	txtDistrict = arcpy.mapping.ListLayoutElements(map, "TEXT_ELEMENT", "Title")[0]
 	scaleBar = arcpy.mapping.ListLayoutElements(map, "", "Alternating Scale Bar")[0]
 
-	txtDistrict.text = "2010 Functional Classification Update - %s District" % districtName
+	txtDistrict.text = "2010 Functional Classify Update - %s District" % districtName
 	
 	if mapType == "city":
 		scaleBar.elementWidth = 5.2
