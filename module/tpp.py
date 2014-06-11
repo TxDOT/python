@@ -290,7 +290,7 @@ def markOverlaps(table, overlap_field_name, from_field):
         if row.getValue(overlap_field_name) == 1:
             marker = 1
         elif marker == 1 and row.getValue(overlap_field_name) == 0:
-            row.setValue(overlap_field_name) = 1
+            row.setValue(overlap_field_name, 1)
             marker = 0
         else:
             pass
