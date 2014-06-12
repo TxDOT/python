@@ -190,7 +190,7 @@ def rte_concatenate(table, group_field="RTE_ID", from_field="FROM_DFO", to_field
 
     # Create field list to check that valid field exists
     field_list = arcpy.ListFields(table)
-    add_field_list = [concatenate_field_name]
+    add_field_list = [concatenate_field_name, "RTE_CONCATENATE_UNIQUE_ID"]
 
     # Add field for marking overlap if specified by user
     if mark_overlap is True:
@@ -224,11 +224,18 @@ def rte_concatenate(table, group_field="RTE_ID", from_field="FROM_DFO", to_field
     counter = 0
     concatenate_index = 1
 
+    # Create Empty List to hold overlaps
+    overlap_list = []
+
     # begin cursor
     while row:
         current = row.getValue(group_field)
         current_from = row.getValue(from_field)
         current_to = row.getValue(to_field)
+
+        # Populate Unique ID field
+        unique_id = counter + 1
+        row.RTE_CONCATENATE_UNIQUE_ID = unique_id
 
         # Sets initial values for the first record in the table
         if counter == 0:
@@ -240,7 +247,8 @@ def rte_concatenate(table, group_field="RTE_ID", from_field="FROM_DFO", to_field
             row.setValue(concatenate_field_name, concatenate_index)
             if mark_overlap is True:
                 if previous_to > current_from:
-                    row.setValue(overlap_field_name, 1)
+                    row.setValue(overlap_field_name, previous_unique_id)
+                    overlap_list.append((previous_unique_id, unique_id))
                 else:
                     row.setValue(overlap_field_name, 0)
 
@@ -259,6 +267,7 @@ def rte_concatenate(table, group_field="RTE_ID", from_field="FROM_DFO", to_field
         # Sets the current records as previous for the next row
         previous = current
         previous_to = current_to
+        previous_unique_id = unique_id
 
         # Saves changes to the current row and get the next row object
         rows.updateRow(row)
@@ -272,27 +281,18 @@ def rte_concatenate(table, group_field="RTE_ID", from_field="FROM_DFO", to_field
 
     if mark_overlap is True:
         print "Completing Overlap Processing..."
-        markOverlaps(table, overlap_field_name, from_field)
+        rows = arcpy.UpdateCursor(table)
+
+        for row in rows:
+            unique_id = row.RTE_CONCATENATE_UNIQUE_ID
+            for item in overlap_list:
+                if  item[0] == unique_id:
+                    row.setValue(overlap_field_name, item[1])
+                    rows.updateRow(row)
+
+    del table, overlap_list, overlap_field_name, row, rows
 
     end_time = time.time()
     print "Elapsed time: {0}".format(time.strftime('%H:%M:%S', time.gmtime(end_time - start_time)))
 
 
-def markOverlaps(table, overlap_field_name, from_field):
-    """
-    Marks the other half of duplicates in a route event table.
-    """
-    marker = 0
-    sort_string = str("{0} A; {1} D".format(overlap_field_name, from_field))
-    rows = arcpy.UpdateCursor(table, "", "", "", sort_string)
-
-    for row in rows:
-        if row.getValue(overlap_field_name) == 1:
-            marker = 1
-        elif marker == 1 and row.getValue(overlap_field_name) == 0:
-            row.setValue(overlap_field_name, 1)
-            marker = 0
-        else:
-            pass
-        rows.updateRow(row)
-    del row, rows
