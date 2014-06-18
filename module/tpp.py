@@ -190,7 +190,7 @@ def rte_concatenate(table, group_field="RTE_ID", from_field="FROM_DFO", to_field
 
     # Create field list to check that valid field exists
     field_list = arcpy.ListFields(table)
-    add_field_list = [concatenate_field_name, "RTE_CONCATENATE_UNIQUE_ID"]
+    add_field_list = [concatenate_field_name, "RC_UNIQUE"]
 
     # Add field for marking overlap if specified by user
     if mark_overlap is True:
@@ -235,7 +235,7 @@ def rte_concatenate(table, group_field="RTE_ID", from_field="FROM_DFO", to_field
 
         # Populate Unique ID field
         unique_id = counter + 1
-        row.RTE_CONCATENATE_UNIQUE_ID = unique_id
+        row.RC_UNIQUE = unique_id
 
         # Sets initial values for the first record in the table
         if counter == 0:
@@ -284,7 +284,7 @@ def rte_concatenate(table, group_field="RTE_ID", from_field="FROM_DFO", to_field
         rows = arcpy.UpdateCursor(table)
 
         for row in rows:
-            unique_id = row.RTE_CONCATENATE_UNIQUE_ID
+            unique_id = row.RC_UNIQUE
             for item in overlap_list:
                 if  item[0] == unique_id:
                     row.setValue(overlap_field_name, item[1])
