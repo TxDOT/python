@@ -160,7 +160,7 @@ def archiveComanche(output_path, db_connection):
 
 
 def rte_concatenate(table, group_field="RTE_ID", from_field="FROM_DFO", to_field="TO_DFO",
-                    concatenate_field_name="CONCATENATE", mark_overlap=True, overlap_field_name="OVERLAPS"):
+                    concatenate_field_name="CONCAT", mark_overlap=True, overlap_field_name="OVERLAPS"):
     """
     Adds a field for route concatenate and populates a concatenation index. This value marks records that belong
     to the same linear segment. Optionally, checks for overlapping measures.
