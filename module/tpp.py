@@ -209,11 +209,12 @@ def rte_concatenate(table, group_field="RTE_ID", from_field="FROM_DFO",
 
     # Create table in memory
     output_dir_path = os.path.dirname(table)
-    output_table_name = os.path.basename(table)
+    output_table_name = os.path.basename(table) + "_RTE_CONCATENATE"
     output_table = os.path.join(output_dir_path, output_table_name)
 
     # Create temp table
     temp_table = "in_memory//output_table_name"
+    arcpy.TableSelect_analysis(table, temp_table)
 
     # Create field list to check that valid field exists
     field_list = arcpy.ListFields(temp_table)
