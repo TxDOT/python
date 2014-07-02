@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='tpp',
-    version='1.1',
+    version='1.2',
     description='TxDOT Python Productivity Tools for TPP-GIS',
     author='TPP-GIS',
     author_email='TPP_GIS@txdot.gov',
