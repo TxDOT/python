@@ -138,11 +138,14 @@ def archiveComanche(output_path, db_connection):
     outputWorkspace = output_path
 
     print "Creating New File Geodatabase..."
-    arcpy.CreateFileGDB_management(outputWorkspace, "Archive" + formatTime, "10.0")
+    arcpy.CreateFileGDB_management(outputWorkspace, "Archive" + formatTime,
+                                   "10.0")
     outputPath = outputWorkspace + "Archive" + formatTime + ".gdb"
 
-    copyFiles = ["TPP_GIS.MCHAMB1.Roadways\\TPP_GIS.MCHAMB1.TXDOT_Roadways", "TPP_GIS.MCHAMB1.RTE_CONCURRENT",
-                 "TPP_GIS.MCHAMB1.RTE_CONTROL_SECTION", "TPP_GIS.MCHAMB1.SUBFILES"]
+    copyFiles = ["TPP_GIS.MCHAMB1.Roadways\\TPP_GIS.MCHAMB1.TXDOT_Roadways",
+                 "TPP_GIS.MCHAMB1.RTE_CONCURRENT",
+                 "TPP_GIS.MCHAMB1.RTE_CONTROL_SECTION",
+                 "TPP_GIS.MCHAMB1.SUBFILES"]
 
     for file in copyFiles:
         if file == "TPP_GIS.MCHAMB1.Roadways\\TPP_GIS.MCHAMB1.TXDOT_Roadways":
@@ -199,12 +202,21 @@ def rte_concatenate(table, group_field="RTE_ID", from_field="FROM_DFO",
     # Import arcpy module
     import arcpy
     import time
+    import os
 
     # Establish start time
     start_time = time.time()
 
+    # Create table in memory
+    output_dir_path = os.path.dirname(table)
+    output_table_name = os.path.basename(table)
+    output_table = os.path.join(output_dir_path, output_table_name)
+
+    # Create temp table
+    temp_table = "in_memory//output_table_name"
+
     # Create field list to check that valid field exists
-    field_list = arcpy.ListFields(table)
+    field_list = arcpy.ListFields(temp_table)
     add_field_list = [concatenate_field_name, "RC_UNIQUE"]
 
     # Add field for marking overlap if specified by user
@@ -225,13 +237,13 @@ def rte_concatenate(table, group_field="RTE_ID", from_field="FROM_DFO",
     else:
         for field in add_field_list:
             print "Adding Field: {0}".format(field)
-            arcpy.AddField_management(table, field, "LONG")
+            arcpy.AddField_management(temp_table, field, "LONG")
 
     # Create update cursor to populate the concatenation value
     sort_string = str("{0} A; {1} A".format(group_field, from_field))
     fields_subset = "[group_field, from_field, to_field, concatenate_field_name,\
                       overlap_field_name]"
-    rows = arcpy.UpdateCursor(table, "", "", fields_subset, sort_string)
+    rows = arcpy.UpdateCursor(temp_table, "", "", fields_subset, sort_string)
     row = rows.next()
 
     # Create baseline variables
@@ -298,7 +310,7 @@ def rte_concatenate(table, group_field="RTE_ID", from_field="FROM_DFO",
 
     if mark_overlap is True:
         print "Completing Overlap Processing..."
-        rows = arcpy.UpdateCursor(table)
+        rows = arcpy.UpdateCursor(temp_table)
 
         for row in rows:
             unique_id = row.RC_UNIQUE
@@ -307,7 +319,11 @@ def rte_concatenate(table, group_field="RTE_ID", from_field="FROM_DFO",
                     row.setValue(overlap_field_name, item[1])
                     rows.updateRow(row)
 
-    del table, overlap_list, overlap_field_name, row, rows
+    # Write out temp_table
+    arcpy.CopyRows_management(temp_table, output_table)
+
+    # Delete out from memory
+    del temp_table, table, overlap_list, overlap_field_name, row, rows
 
     end_time = time.time()
     print "Elapsed time: {0}".format(time.strftime('%H:%M:%S',
