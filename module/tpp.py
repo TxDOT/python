@@ -324,6 +324,7 @@ def rte_concatenate(table, group_field="RTE_ID", from_field="FROM_DFO",
     arcpy.CopyRows_management(temp_table, output_table)
 
     # Delete out from memory
+    arcpy.Delete_management(temp_table)
     del temp_table, table, overlap_list, overlap_field_name, row, rows
 
     end_time = time.time()
