@@ -1,6 +1,7 @@
 def txArchive():
     """
-    Create an archive of your MyModules script and push the working script to the main folder.
+    Create an archive of your MyModules script and push the working script
+    to the main folder.
     """
     import os
     import time
@@ -8,8 +9,9 @@ def txArchive():
 
     directory = r"C:\DATAMGT\Scripts\MyModules"
     workingCopy = r"C:\DATAMGT\Scripts\MyModules\MyModules_WorkingCopy.py"
-    archiveTime = str(time.localtime()[2]) + str(time.localtime()[1]) + str(time.localtime()[0]) + "_" + str(
-        time.localtime()[3]) + str(time.localtime()[4])
+    archiveTime = str(time.localtime()[2]) + str(time.localtime()[1]) + \
+        str(time.localtime()[0]) + "_" + \
+        str(time.localtime()[3]) + str(time.localtime()[4])
     archive = (directory + os.sep + "Archive" + archiveTime + ".py")
     MyModulesMain = r"C:\Python26\ArcGIS10.0\Lib\site-packages\MyModules.py"
     shutil.copyfile(MyModulesMain, archive)
@@ -22,7 +24,8 @@ def txArchive():
 
 def fileChecklist(directory, extension='All'):
     """
-    Create a checklist file in "txt" format for any folder - list all files by name.
+    Create a checklist file in "txt" format for any folder - list all files
+    by name.
     """
     import os
 
@@ -41,20 +44,28 @@ def fileChecklist(directory, extension='All'):
 
 def projectMenu():
     """
-    Through a defined menu, allows a user to select a project category, create a new folder, and optionally add a project plan document.
+    Through a defined menu, allows a user to select a project category,
+    create a new folder, and optionally add a project plan document.
     """
-    import os, shutil, time
+    import os
+    import shutil
+    import time
     # Determine project type and location
     ansMenu = raw_input(
-        "What type of project are you creating?\n\n 1 - Data Transmittal\n 2 - Minute Order\n 3 - Special Map\n 4 - Training Map\n 5 - Other Location\n\nEnter Selection: ")
+        "What type of project are you creating?\n\n 1 - Data Transmittal\n\
+         2 - Minute Order\n 3 - Special Map\n 4 - Training Map\n\
+         5 - Other Location\n\nEnter Selection: ")
     if ansMenu == '1':
         tmYR = str(time.localtime()[0])
         path = ("T:\\DATAMGT\MAPPING\\Data Transmittals" + os.sep + tmYR)
     elif ansMenu == '2':
         tmYR = str(time.localtime()[0])
-        path = ("T:\\DATAMGT\\MAPPING\\Special Maps" + os.sep + tmYR + "\\Minute Orders")
+        path = ("T:\\DATAMGT\\MAPPING\\Special Maps" + os.sep + tmYR +
+                "\\Minute Orders")
         moType = raw_input(
-            "\nWhat's the intent of the Minute Order?\n\n 1 - New Designation\n 2 - Re-Designation\n 3 - Proposed Highway\n 4 - Removal\n\nEnter Selection: ")
+            "\nWhat's the intent of the Minute Order?\n\n 1 - New Designation\n\
+             2 - Re-Designation\n 3 - Proposed Highway\n\
+             4 - Removal\n\nEnter Selection: ")
         if moType == '1':
             moChange = "New Designation"
         if moType == '2':
@@ -69,11 +80,13 @@ def projectMenu():
     elif ansMenu == '4':
         path = "T:\\DATAMGT\\MAPPING\\Training"
     else:
-        path = raw_input("\nWhat is the filepath of your working directory?\n\nPath: ")
+        path = raw_input("\nWhat is the filepath of your working directory?\
+                          \n\nPath: ")
     # Name the project
     projName = raw_input("\nWhat is the project name?: ")
     # Ask for a project plan
-    ansPlan = raw_input("\nWould you like to include a project plan? \n\nY or N: ")
+    ansPlan = raw_input("\nWould you like to include a project plan? \
+                         \n\nY or N: ")
     # Create folder directory
     folderPDF = (path + os.sep + projName + os.sep + "PDF")
     folderGeoData = (path + os.sep + projName + os.sep + "Geographic Data")
@@ -81,9 +94,11 @@ def projectMenu():
     folderMaps = (path + os.sep + projName + os.sep + "Maps")
     folderDoc = (path + os.sep + projName + os.sep + "Documentation")
     # Change the location of the Project Template here:
-    projTemp = r"T:\DATAMGT\MAPPING\Personal Folders\David H\Scripts\ProjectTemplate.doc"
+    projTemp = "T:\\DATAMGT\\MAPPING\\Personal Folders\\David H\
+                \\Scripts\\ProjectTemplate.doc"
     newProjPlan = (folderDoc + os.sep + projName + ".doc")
-    folderList = [folderPDF, folderGeoData, folderScripts, folderMaps, folderDoc]
+    folderList = [folderPDF, folderGeoData,
+                  folderScripts, folderMaps, folderDoc]
     for x in folderList:
         if not os.path.exists(x):
             os.makedirs(x)
@@ -96,20 +111,25 @@ def projectMenu():
     print projDirectory
     # Open the file directory in Windows Explorer
     os.startfile(projDirectory)
-    # Modify or create (if not existing) a general log file for all logged projects
+    # Modify or create (if not existing) a general log file
+    # for all logged projects
     # Change the location of the general log file here:
-    logFile = "T:\\DATAMGT\\MAPPING\\Personal Folders\\David H\\Scripts\\ProjectLogFile.txt"
+    logFile = "T:\\DATAMGT\\MAPPING\\Personal Folders\\David H\\Scripts\
+               \\ProjectLogFile.txt"
     # Collect user name information
     userName = (os.path.expanduser("~/"))[9:16]
     # Record directory creation in general log
     with open(logFile, "a") as log:
-        log.write("\n" + time.ctime() + ", " + userName + ", " + projName + ", " + projDirectory)
+        log.write("\n" + time.ctime() + ", " + userName + ", " +
+                  projName + ", " + projDirectory)
     # Create a log file specifically for minute orders
     # Change the location of the Minute Order log file here:
-    moLogFile = "T:\\DATAMGT\\MAPPING\\Personal Folders\\David H\\Scripts\\MinuteOrderProjectLogFile.txt"
+    moLogFile = "T:\\DATAMGT\\MAPPING\\Personal Folders\\David H\
+                 \\Scripts\\MinuteOrderProjectLogFile.txt"
     # Log minute order specifics into Minute Order log file
     with open(moLogFile, "a") as log:
-        log.write("\n" + time.ctime() + ", " + moChange + ", " + userName + ", " + projName + ", " + projDirectory)
+        log.write("\n" + time.ctime() + ", " + moChange + ", "
+                  + userName + ", " + projName + ", " + projDirectory)
 
 
 def archiveComanche(output_path, db_connection):
