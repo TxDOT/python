@@ -159,26 +159,41 @@ def archiveComanche(output_path, db_connection):
     print "Archive Complete..."
 
 
-def rte_concatenate(table, group_field="RTE_ID", from_field="FROM_DFO", to_field="TO_DFO",
-                    concatenate_field_name="CONCAT", mark_overlap=True, overlap_field_name="OVERLAPS"):
+def rte_concatenate(table, group_field="RTE_ID", from_field="FROM_DFO",
+                    to_field="TO_DFO", concatenate_field_name="CONCAT",
+                    mark_overlap=True, overlap_field_name="OVERLAPS"):
     """
-    Adds a field for route concatenate and populates a concatenation index. This value marks records that belong
-    to the same linear segment. Optionally, checks for overlapping measures.
+    Adds a field for route concatenate and populates a concatenation index.
+    This value marks records that belong to the same linear segment.
+    Optionally, checks for overlapping measures.
 
     Example 1:
     rte_concatenate("C:\\Test.gdb\\test")
 
     Example 2:
-    rte_concatenate("C:\\Test.gdb\\test", "Route_ID", "FRM_Mea", "TO_Mea", "Concat", True, "Overlap")
+    rte_concatenate("C:\\Test.gdb\\test", "Route_ID", "FRM_Mea",
+        "TO_Mea", "Concat", True, "Overlap")
 
     Args:
         table_name (str): Full path to the route table
-        group_field (str, optional): Field name containing field for concatenation ("RTE_ID","C_SEC"); default: "RTE_ID"
-        from_field (str, optional): Field name containing from measure; default: "FROM_DFO"
-        to_field (str, optional): Field name containing to measure; default: "TO_DFO"
-        concatenate_field_name (str, optional): Specify custom name for concatenate field
-        mark_overlap (boolean, optional): Mark if the measures are overlapping; default: True
-        overlap_field_name (str, optional): Specify custom name for concatenate field; default: "RTE_OVERLAP"
+
+        group_field (str, optional): Field name containing field for
+        concatenation ("RTE_ID","C_SEC"); default: "RTE_ID"
+
+        from_field (str, optional): Field name containing from measure;
+        default: "FROM_DFO"
+
+        to_field (str, optional): Field name containing to measure;
+        default: "TO_DFO"
+
+        concatenate_field_name (str, optional): Specify custom name for
+        concatenate field; default: "CONCAT"
+
+        mark_overlap (boolean, optional): Mark if the measures are overlapping;
+        default: True
+
+        overlap_field_name (str, optional): Specify custom name for concatenate
+        field; default: "RTE_OVERLAP"
     """
 
     # Import arcpy module
@@ -214,13 +229,15 @@ def rte_concatenate(table, group_field="RTE_ID", from_field="FROM_DFO", to_field
 
     # Create update cursor to populate the concatenation value
     sort_string = str("{0} A; {1} A".format(group_field, from_field))
-    fields_subset = "[group_field, from_field, to_field, concatenate_field_name, overlap_field_name]"
+    fields_subset = "[group_field, from_field, to_field, concatenate_field_name,\
+                      overlap_field_name]"
     rows = arcpy.UpdateCursor(table, "", "", fields_subset, sort_string)
     row = rows.next()
 
     # Create baseline variables
     previous = ""
     previous_to = ""
+    previous_unique_id = ""
     counter = 0
     concatenate_index = 1
 
@@ -286,13 +303,12 @@ def rte_concatenate(table, group_field="RTE_ID", from_field="FROM_DFO", to_field
         for row in rows:
             unique_id = row.RC_UNIQUE
             for item in overlap_list:
-                if  item[0] == unique_id:
+                if item[0] == unique_id:
                     row.setValue(overlap_field_name, item[1])
                     rows.updateRow(row)
 
     del table, overlap_list, overlap_field_name, row, rows
 
     end_time = time.time()
-    print "Elapsed time: {0}".format(time.strftime('%H:%M:%S', time.gmtime(end_time - start_time)))
-
-
+    print "Elapsed time: {0}".format(time.strftime('%H:%M:%S',
+                                     time.gmtime(end_time - start_time)))
