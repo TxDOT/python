@@ -177,13 +177,13 @@ def archiveComanche(output_path, db_connection):
                                    "10.0")
     outputPath = outputWorkspace + "Archive" + formatTime + ".gdb"
 
-    copyFiles = ["TPP_GIS.MCHAMB1.Roadways\\TPP_GIS.MCHAMB1.TXDOT_Roadways",
-                 "TPP_GIS.MCHAMB1.RTE_CONCURRENT",
-                 "TPP_GIS.MCHAMB1.RTE_CONTROL_SECTION",
-                 "TPP_GIS.MCHAMB1.SUBFILES"]
+    copyFiles = ["TPP_GIS.APP_TPP_GIS_ADMIN.Roadways\\TPP_GIS.APP_TPP_GIS_ADMIN.TXDOT_Roadways",
+                 "TPP_GIS.APP_TPP_GIS_ADMIN.RTE_CONCURRENT",
+                 "TPP_GIS.APP_TPP_GIS_ADMIN.RTE_CONTROL_SECTION",
+                 "TPP_GIS.APP_TPP_GIS_ADMIN.SUBFILES"]
 
     for file in copyFiles:
-        if file == "TPP_GIS.MCHAMB1.Roadways\\TPP_GIS.MCHAMB1.TXDOT_Roadways":
+        if file == "TPP_GIS.APP_TPP_GIS_ADMIN.Roadways\\TPP_GIS.APP_TPP_GIS_ADMIN.TXDOT_Roadways":
             fileName = file.split(".")[4]
             print "Exporting " + fileName
             outFC = outputPath + os.sep + fileName
