@@ -365,3 +365,49 @@ def rte_concatenate(table, group_field="RTE_ID", from_field="FROM_DFO",
     end_time = time.time()
     print "Elapsed time: {0}".format(time.strftime('%H:%M:%S',
                                      time.gmtime(end_time - start_time)))
+
+
+def rte_order(rteTable, rteIDField, frmMeasField, orderField='RTE_ORDER'):
+    """
+    Adds segment order index by a common id and measure.
+
+    :param rteTable:
+    :param rteIDField:
+    :param frmMeasField:
+    :param orderField:
+    :return:
+    """
+    import arcpy
+
+    sort_string = str("{0} A;{1} A".format(rteIDField, frmMeasField))
+    rows = arcpy.UpdateCursor(rteTable, "", "", "", sort_string)
+    row = rows.next()
+
+    current = ""
+    previous = ""
+    counter = 0
+    NEW_ORDER = 1
+
+    if not arcpy.ListFields(rteTable, orderField):
+        print orderField + " field is not here...I'll go ahead and add it,\
+               then proceed with adding the new order"
+        arcpy.AddField_management(rteTable, orderField, "SHORT")
+
+    while row:
+        current = row.getValue(rteIDField)
+        if counter == 0:
+            previous = current
+            row.setValue(orderField, NEW_ORDER)
+        elif previous == current and counter > 0:
+            NEW_ORDER += 1
+            row.setValue(orderField, NEW_ORDER)
+        else:
+            NEW_ORDER = 1
+            row.setValue(orderField, NEW_ORDER)
+        previous = current
+        counter += 1
+        print counter
+        rows.updateRow(row)
+        row = rows.next()
+
+    del row, rows
