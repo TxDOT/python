@@ -411,3 +411,44 @@ def rte_order(rteTable, rteIDField, frmMeasField, orderField='RTE_ORDER'):
         row = rows.next()
 
     del row, rows
+
+
+def unique_values(table, field, query=None):
+    """
+    Return all unique values in a field as a list of strings
+
+    :param table: Input table (any format accepted by ArcPy
+    :param field: The field to return unique values for
+    :param query: Optional query
+    :return: Returns a list of unique values as strings
+    """
+    import arcpy
+    import numpy as np
+
+    desc = arcpy.Describe(table)
+
+    field_type = None
+
+    for f in desc.fields:
+        if f.name == field:
+            field_type = f.type
+            break
+        else:
+            pass
+
+    if not query:
+        rows = arcpy.SearchCursor(table)
+    else:
+        rows = arcpy.SearchCursor(table, query)
+
+    field_values = []
+
+    for row in rows:
+        if field_type == "SmallInteger" or field_type == "Integer":
+            field_values.append(int(row.getValue(field)))
+        else:
+            field_values.append(str(row.getValue(field)))
+
+    data = np.array(field_values)
+
+    return np.unique(data)
