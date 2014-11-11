@@ -450,5 +450,37 @@ def unique_values(table, field, query=None):
             field_values.append(str(row.getValue(field)))
 
     data = np.array(field_values)
+    unique_data = np.unique(data)
 
-    return np.unique(data)
+    return unique_data.tolist()
+
+
+def unique_values_report(input_table, output_table, max_values=25):
+    """
+    Given an ArcGIS table or feature class, creates a CSV of all unique values
+
+    :param input_table: Input table with values
+    :param output_table: Output CSV file
+    :param max_values: Total number of unique values to report (default=25)
+    :return: None
+    """
+    from os import path
+    import csv
+
+    import arcpy
+    from arcpy import env
+
+    env.workspace = path.dirname(input_table)
+    in_table = path.basename(input_table)
+
+    with open(output_table, 'wb') as out_csv:
+        spamwriter = csv.DictWriter(out_csv, ["Field", "Unique Values"])
+        for field in [f.name for f in arcpy.ListFields(in_table)]:
+            uniq_val = unique_values(input_table, field)
+            if len(uniq_val) <= max_values:
+                print "Field: {0} Values: {1}".format(field, uniq_val)
+                spamwriter.writerow({'Field': field,
+                                     'Unique Values': uniq_val})
+            else:
+                print "OBSCURED - Field: {0} has more than {1} unique " \
+                      "values".format(field, max_values)
