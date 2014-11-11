@@ -447,7 +447,11 @@ def unique_values(table, field, query=None):
         if field_type == "SmallInteger" or field_type == "Integer":
             field_values.append(int(row.getValue(field)))
         else:
-            field_values.append(str(row.getValue(field)))
+            if row.getValue(field) is not None:
+                row_value = str(row.getValue(field))
+            else:
+                row_value = 'NoneType'
+            field_values.append(row_value)
 
     data = np.array(field_values)
     unique_data = np.unique(data)
