@@ -22,13 +22,13 @@ def txArchive():
     import time
     import shutil
 
-    directory = r"C:\DATAMGT\Scripts\MyModules"
-    workingCopy = r"C:\DATAMGT\Scripts\MyModules\MyModules_WorkingCopy.py"
+    directory = "C:\\DATAMGT\\Scripts\\MyModules"
+    workingCopy = "C:\\DATAMGT\\Scripts\\MyModules\MyModules_WorkingCopy.py"
     archiveTime = str(time.localtime()[2]) + str(time.localtime()[1]) + \
         str(time.localtime()[0]) + "_" + \
         str(time.localtime()[3]) + str(time.localtime()[4])
     archive = (directory + os.sep + "Archive" + archiveTime + ".py")
-    MyModulesMain = r"C:\Python26\ArcGIS10.0\Lib\site-packages\MyModules.py"
+    MyModulesMain = "C:\\Python26\\ArcGIS10.0\\Lib\\site-packages\MyModules.py"
     shutil.copyfile(MyModulesMain, archive)
     shutil.copyfile(workingCopy, MyModulesMain)
     del directory
@@ -379,41 +379,40 @@ def rte_order(rteTable, rteIDField, frmMeasField, orderField='RTE_ORDER'):
     """
     import arcpy
 
-    sort_string = str("{0} A;{1} A".format(rteIDField, frmMeasField))
-    rows = arcpy.UpdateCursor(rteTable, "", "", "", sort_string)
-    row = rows.next()
+    sql_clause = (None, "ORDER BY {0}, {1} ASC".format(rteIDField,
+                  frmMeasField))
 
     current = ""
     previous = ""
     counter = 0
     NEW_ORDER = 1
 
-    if not arcpy.ListFields(rteTable, orderField):
-        print orderField + " field is not here...I'll go ahead and add it,\
-               then proceed with adding the new order"
+    if orderField not in [f.name for f in arcpy.ListFields(rteTable)]:
+        print "Adding order field..."
         arcpy.AddField_management(rteTable, orderField, "SHORT")
 
-    while row:
-        current = row.getValue(rteIDField)
-        if counter == 0:
+    with arcpy.da.UpdateCursor(in_table=rteTable,
+                               field_names=[rteIDField, frmMeasField,
+                                            orderField],
+                               sql_clause=sql_clause) as rows:
+        for row in rows:
+            current = row[0]
+            if counter == 0:
+                previous = current
+                row[2] = NEW_ORDER
+            elif previous == current and counter > 0:
+                NEW_ORDER += 1
+                row[2] = NEW_ORDER
+            else:
+                NEW_ORDER = 1
+                row[2] = NEW_ORDER
             previous = current
-            row.setValue(orderField, NEW_ORDER)
-        elif previous == current and counter > 0:
-            NEW_ORDER += 1
-            row.setValue(orderField, NEW_ORDER)
-        else:
-            NEW_ORDER = 1
-            row.setValue(orderField, NEW_ORDER)
-        previous = current
-        counter += 1
-        print counter
-        rows.updateRow(row)
-        row = rows.next()
-
-    del row, rows
+            counter += 1
+            print counter
+            rows.updateRow(row)
 
 
-def unique_values(table, field, query=None):
+def unique_values_arcpy(table, field, query=None):
     """
     Return all unique values in a field as a list of strings
 
@@ -463,7 +462,7 @@ def unique_values(table, field, query=None):
     return unique_data.tolist()
 
 
-def unique_values_report(input_table, output_table, max_values=25):
+def unique_values_report_arcpy(input_table, output_table, max_values=25):
     """
     Given an ArcGIS table or feature class, creates a CSV of all unique values
 
@@ -484,7 +483,38 @@ def unique_values_report(input_table, output_table, max_values=25):
     with open(output_table, 'wb') as out_csv:
         spamwriter = csv.DictWriter(out_csv, ["Field", "Unique Values"])
         for field in [f.name for f in arcpy.ListFields(in_table)]:
-            uniq_val = unique_values(input_table, field)
+            uniq_val = unique_values_arcpy(input_table, field)
+            if len(uniq_val) <= max_values:
+                print "Field: {0} Values: {1}".format(field, uniq_val)
+                spamwriter.writerow({'Field': field,
+                                     'Unique Values': uniq_val})
+            else:
+                print "OBSCURED - Field: {0} has more than {1} unique " \
+                      "values".format(field, max_values)
+
+
+def unique_values_report_csv(input_table, output_table, max_values=25):
+    """
+    Given a table in CSV format creates a new CSV of all unique values
+
+    :param input_table: Input table with values
+    :param output_table: Output CSV file
+    :param max_values: Total number of unique values to report (default=25)
+    :return: None
+    """
+    from os import path
+    import csv
+
+    import arcpy
+    from arcpy import env
+
+    env.workspace = path.dirname(input_table)
+    in_table = path.basename(input_table)
+
+    with open(output_table, 'wb') as out_csv:
+        spamwriter = csv.DictWriter(out_csv, ["Field", "Unique Values"])
+        for field in [f.name for f in arcpy.ListFields(in_table)]:
+            uniq_val = unique_values_arcpy(input_table, field)
             if len(uniq_val) <= max_values:
                 print "Field: {0} Values: {1}".format(field, uniq_val)
                 spamwriter.writerow({'Field': field,
