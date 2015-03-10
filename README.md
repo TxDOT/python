@@ -14,11 +14,11 @@
 
 System Requirements
 - **Windows Only**
-- **ArcGIS 10.***
-- **Python 2.6(or greater)**
+- **ArcGIS 10.2**
+- **Python 2.7**
 
 ----------
 
-***Scripts and Modules are also available for use on an "as is" basis. Depandencies are property of their creators, not TxDOT or TPP. Offical licence will be attached soon and should be considered valid for all files and revisions.***
+***Scripts and Modules are also available for use on an "as is" basis. Dependencies are property of their creators, not TxDOT or TPP. Official license will be attached soon and should be considered valid for all files and revisions.***
 
-Updated October 9, 2013
+Updated March 10th, 2015
