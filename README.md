@@ -2,8 +2,8 @@
 ----------
 
 ## How to Install the **tx** module##
-	
-> Open the **module** folder. Inside, there is a file named **install.py**, you can run it by double-clicking on the file. The module will automatically install itself, and any dependencies.
+
+> Open a new command line session and change the directory to the **module** folder. Type ```python setup.py install``` and press Enter.
 
 
 ## How to run the **standalone** scripts ##
