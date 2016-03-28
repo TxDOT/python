@@ -1,0 +1,14 @@
+<ESRI.Configuration xmlns="http://schemas.esri.com/Desktop/AddIns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><Name>HPMS Curves Hamster</Name><AddInID>{84ed2978-e13b-4d00-989c-b4eb8208be5b}</AddInID><Description>New Addin</Description><Version>0.1</Version><Image>Images\hamster_face_ios.png</Image><Author>Jason Kleinert</Author><Company>Texas Department of Transportation</Company><Date>03/17/2016</Date><Targets><Target name="Desktop" version="10.3" /></Targets><AddIn language="PYTHON" library="hpms_curves_hamster_toolbar_addin.py" namespace="hpms_curves_hamster_toolbar_addin"><ArcMap>
+    <Commands>
+        <ComboBox caption="Layer Select" category="HPMS Curves Hamster" class="LayerSelectCombobox" id="LayerSelect.layerbox" itemSizeString="WWWWWW" message="Only polyline features are selectable. The selected features must be m enabled and contain monotonic m values. This tool will honor definition queries and selections." rows="4" sizeString="WWWWWW" tip="Select Layer To Analyze"><Help heading="" /></ComboBox>
+        <ComboBox caption="ID Field" category="HPMS Curves Hamster" class="IDCombobox" id="ID.idbox" itemSizeString="WWWWWW" message="Choose an ID field to include in the result. A unique ID is not required, OBJECTID will also be retained. (Ex. HPMSID)" rows="4" sizeString="WWWWWW" tip="Select ID Field"><Help heading="" /></ComboBox>
+        <Button caption="Run Curves Hamster" category="HPMS Curves Hamster" class="Run" id="Run.runbutton" image="Images\hamster_face_ios.png" message="" tip="Calculate curve class"><Help heading="" /></Button>
+        </Commands>
+    <Extensions>
+        </Extensions>
+    <Toolbars>
+        <Toolbar caption="Curves Hamster" category="HPMS Curves Hamster" id="curves_hamster.toolbar" showInitially="true"><Items><ComboBox refID="LayerSelect.layerbox" /><ComboBox refID="ID.idbox" /><Button refID="Run.runbutton" /></Items></Toolbar>
+        </Toolbars>
+    <Menus>
+        </Menus>
+    </ArcMap></AddIn></ESRI.Configuration>
