@@ -15,10 +15,11 @@ Open the **standalone** folder. Scripts within this folder are ready to be run b
 - ArcGIS 10.3
 - Python 2.7
 
-***Scripts and Modules are also available for use on an "as is" basis. Dependencies are property of their creators, not TxDOT or TPP.***
 
 ## License ##
 
 See the LICENSE file for license rights and limitations (MIT)
+
+***Scripts and Modules are also available for use on an "as is" basis. Dependencies are property of their creators, not TxDOT or TPP.***
 
 Updated March 31, 2016
