@@ -12,7 +12,7 @@ Open the **standalone** folder. Scripts within this folder are ready to be run b
 
 ## System Requirements ##
 - Windows Only
-- ArcGIS 10.3
+- ArcGIS 10.x
 - Python 2.7
 
 
