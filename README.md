@@ -10,7 +10,7 @@ Open a new command line session and change the directory to the **module** folde
 
 Open the **standalone** folder. Scripts within this folder are ready to be run by **double clicking** on them, or from the console (sometimes with arguments).  *They do not need to be run from within ArcGIS*.
 
-##### System Requirements #####
+## System Requirements ##
 - Windows Only
 - ArcGIS 10.3
 - Python 2.7
