@@ -14,11 +14,17 @@
 
 System Requirements
 - **Windows Only**
-- **ArcGIS 10.2**
+- **ArcGIS 10.3**
 - **Python 2.7**
 
 ----------
 
-***Scripts and Modules are also available for use on an "as is" basis. Dependencies are property of their creators, not TxDOT or TPP. Official license will be attached soon and should be considered valid for all files and revisions.***
+***Scripts and Modules are also available for use on an "as is" basis. Dependencies are property of their creators, not TxDOT or TPP.***
 
-Updated March 10th, 2015
+----------
+
+## License ##
+
+> See the LICENSE file for license rights and limitations (MIT)
+
+Updated March 31, 2016
