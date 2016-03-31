@@ -10,10 +10,10 @@ Open a new command line session and change the directory to the **module** folde
 
 Open the **standalone** folder. Scripts within this folder are ready to be run by **double clicking** on them, or from the console (sometimes with arguments).  *They do not need to be run from within ArcGIS*.
 
-System Requirements
-- **Windows Only**
-- **ArcGIS 10.3**
-- **Python 2.7**
+##### System Requirements #####
+- Windows Only
+- ArcGIS 10.3
+- Python 2.7
 
 ***Scripts and Modules are also available for use on an "as is" basis. Dependencies are property of their creators, not TxDOT or TPP.***
 
