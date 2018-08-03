@@ -56,12 +56,12 @@ while t < len(fcList):
   for fc in fcList:
     print ("starting...")
     service = fcList[t]
-    # # Stage Service
+    #Stage Service
     sd_filename = service + ".sd"
     sd_output_filename = os.path.join(outdir, sd_filename)
     print (service,sd_filename,sd_output_filename)
     arcpy.StageService_server(fcListAll[t], sd_output_filename)
-      # Share to portal
+    # Share to portal
     print("Uploading Service Definition...")
     arcpy.UploadServiceDefinition_server(sd_output_filename, "My Hosted Services")
     print("Successfully Uploaded service.")
