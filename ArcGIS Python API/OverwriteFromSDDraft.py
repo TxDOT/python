@@ -7,7 +7,7 @@ from arcgis.gis import GIS
 prjPath = r"C:\Users\SROSS-C\Documents\ArcGIS\Projects\UpdateServiceTest\MyProject\MyProject.aprx"
 arcpy.env.workspace = r"C:\Users\SROSS-C\Documents\ArcGIS\Projects\UpdateServiceTest\MyProject\MyProject.gdb"
 portal = "http://www.arcgis.com" # Can also reference a local portal
-user = "sross_c_TXDOT"
+user = "Username"
 password = "Password"
 fcList = sorted(arcpy.ListFeatureClasses())
 
