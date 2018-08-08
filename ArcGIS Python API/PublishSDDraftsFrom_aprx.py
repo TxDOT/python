@@ -2,8 +2,8 @@ import arcpy, os
 from arcgis.gis import GIS
 
 # Sign in to portal/set workspace
-user = "sross_c_TXDOT"
-password = "Honeybee2!"
+user = "Username"
+password = "Password"
 arcpy.SignInToPortal('https://www.arcgis.com', user, password)
 arcpy.env.workspace = r"C:\Users\SROSS-C\Documents\ArcGIS\Projects\UpdateServiceTest\MyProject\MyProject.gdb"
 portal = "http://www.arcgis.com"
