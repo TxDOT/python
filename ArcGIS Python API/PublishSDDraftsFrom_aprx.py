@@ -1,24 +1,28 @@
 import arcpy, os
 from arcgis.gis import GIS
+import os
+import sys
 
 # Sign in to portal/set workspace
 user = "Username"
 password = "Password"
 arcpy.SignInToPortal('https://www.arcgis.com', user, password)
-arcpy.env.workspace = r"C:\Users\SROSS-C\Documents\ArcGIS\Projects\UpdateServiceTest\MyProject\MyProject.gdb"
 portal = "http://www.arcgis.com"
 gis = GIS(portal, user, password)
+arcpy.AddMessage("Connected to AGO as " + user + "...")
 
+#set workspace gdb.
+arcpy.env.workspace = r"T:\DATAMGT\MAPPING\Projects\2018\GRID Asset Exports\PublishGRIDExports\PublishGRIDExports.gdb"
 # Set output file names
-outdir = r"C:\Users\SROSS-C\Documents\ArcGIS\Projects\UpdateServiceTest\MyProject"
-
+outdir = r"T:\DATAMGT\MAPPING\Projects\2018\GRID Asset Exports\PublishGRIDExports"
 # Reference map to publish
-aprx = arcpy.mp.ArcGISProject(r"C:\Users\SROSS-C\Documents\ArcGIS\Projects\UpdateServiceTest\MyProject\MyProject.aprx")
+aprx = arcpy.mp.ArcGISProject(r"T:\DATAMGT\MAPPING\Projects\2018\GRID Asset Exports\PublishGRIDExports\PublishGRIDExports.aprx")
 m = aprx.listMaps()[0]
 
 #Grab list of feature classes in map
-fcList = sorted(arcpy.ListFeatureClasses())
-# #Get list of filenames.sddraft
+fcList = arcpy.ListFeatureClasses()
+
+#Get list of filenames.sddraft
 arcpy.AddMessage("Getting list of filenames .sddraft...")
 fcListAll =[]
 i = 0
@@ -30,8 +34,9 @@ while i < len(fcList):
     fcListAll.append(sddraft_output_filename)
     i+=1
 fcListAll.sort()
+print (fcListAll)
 
-#number of layers to loop through -1
+#Get the number of layers to loop through
 lyrlist = []
 for lyr in m.listLayers():
   lyrlist.append(lyr)
@@ -45,7 +50,7 @@ while x <= lyrlist1:
     sharing_draft = m.getWebLayerSharingDraft("HOSTING_SERVER", "FEATURE", lyrs, lyrs)
     sharing_draft.credits = "TxDOT – TPP – Data Management"
     sharing_draft.useLimitations = "Copyright 2018. Texas Department of Transportation. This data was produced for internal use within the Texas Department of Transportation and made available to the public for informational purposes only. Accuracy is limited to the validity of available data as of the date published"
-    arcpy.AddMessage("Exporting " + str(lyrs) + ".sd ...")
+    arcpy.AddMessage("Exporting " + str(lyrs) + ".sddraft...")
     sharing_draft.exportToSDDraft(fcListAll[x])     # Create Service Definition Draft file
     x+=1
 
@@ -59,33 +64,52 @@ while t < len(fcList):
     sd_filename = service + ".sd"
     sd_output_filename = os.path.join(outdir, sd_filename)
     try:
+        os.remove(sd_output_filename)
+    except FileNotFoundError:
+        pass
+    try:
         sdItem = gis.content.search("{} AND owner:{}".format(service, user), item_type="Service Definition", sort_field="title", sort_order="asc", max_items=100)[0]
     except IndexError:
         sdItem = "no"
         pass
-    arcpy.AddMessage("Working on " + service)
+    arcpy.AddMessage("Working on " + service + "...")
     weblayer = sdItem.title
     if service == weblayer:
         try:
-            arcpy.AddMessage("Overwriting " + service)
+            arcpy.AddMessage("Overwriting " + service + "...")
             sddraft = fcListAll[t]
             sd = sd_output_filename
             arcpy.StageService_server(sddraft, sd)
             sdItem.update(data=sd)
             sdItem.publish(overwrite=True)
-            arcpy.AddMessage("Success!")
+            arcpy.AddMessage("Successfully published " + service)
             t+=1
         except IndexError:
-            arcpy.AddMessage("Failure")
+            arcpy.AddMessage("Failure to publish " + service)
             continue
     else:
         try:
-            arcpy.AddMessage("Uploading Service Definition" + fcListAll[t] + "...")
+            arcpy.AddMessage("Uploading Service Definition " + fcListAll[t] + "...")
             arcpy.StageService_server(fcListAll[t], sd_output_filename)
             arcpy.UploadServiceDefinition_server(sd_output_filename, "My Hosted Services")
-            arcpy.AddMessage("Successfully Uploaded service.")
+            arcpy.AddMessage("Successfully Uploaded " + service)
             t+=1
         except:
-            arcpy.AddMessage("Failure")
+            arcpy.AddMessage("Failure to publish " + fcListAll[t])
             t+=1
-arcpy.AddMessage("Finished")
+arcpy.AddMessage("Successfully published services to AGO.")
+
+# Remove underscores from titles
+arcpy.AddMessage("Removing underscores from titles...")
+# Search and create a list of content
+fc = gis.content.search(query="owner: sross_c_TXDOT AND type: Feature Service",sort_field="title",sort_order="asc", max_items=100 )
+# Loop through item list
+for item in fc:
+  title = item.title
+  newtitle = title.replace("_"," ")
+  arcpy.AddMessage("Changing " + title + " to " + newtitle + "...")
+  item.update(item_properties={'title':newtitle})
+  print (newtitle)
+
+number = len(fc)
+arcpy.AddMessage("Finished publishing " + str(number) + " layers!")
