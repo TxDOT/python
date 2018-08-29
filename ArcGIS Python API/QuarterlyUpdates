@@ -1,5 +1,6 @@
 import arcpy, os
 from arcgis.gis import GIS
+from arcgis.features import FeatureLayerCollection
 import os
 import sys
 
@@ -9,14 +10,15 @@ password = "Password"
 arcpy.SignInToPortal('https://www.arcgis.com', user, password)
 portal = "http://www.arcgis.com"
 gis = GIS(portal, user, password)
+tag = "Quarterly"
 arcpy.AddMessage("Connected to AGO as " + user + "...")
 
-#set workspace gdb.
-arcpy.env.workspace = r"T:\DATAMGT\MAPPING\Projects\2018\GRID Asset Exports\PublishGRIDExports\PublishGRIDExports.gdb"
+# set workspace gdb.
+arcpy.env.workspace = r"C:\Users\SROSS-C\Documents\AGO_Publishing\QuarterlyUpdates\QuarterlyUpdates.gdb"
 # Set output file names
-outdir = r"T:\DATAMGT\MAPPING\Projects\2018\GRID Asset Exports\PublishGRIDExports"
+outdir = r"C:\Users\SROSS-C\Documents\AGO_Publishing\QuarterlyUpdates"
 # Reference map to publish
-aprx = arcpy.mp.ArcGISProject(r"T:\DATAMGT\MAPPING\Projects\2018\GRID Asset Exports\PublishGRIDExports\PublishGRIDExports.aprx")
+aprx = arcpy.mp.ArcGISProject(r"C:\Users\SROSS-C\Documents\AGO_Publishing\QuarterlyUpdates\QuarterlyUpdates.aprx")
 m = aprx.listMaps()[0]
 
 #Grab list of feature classes in map
@@ -68,7 +70,7 @@ while t < len(fcList):
     except FileNotFoundError:
         pass
     try:
-        sdItem = gis.content.search("{} AND owner:{}".format(service, user), item_type="Service Definition", sort_field="title", sort_order="asc", max_items=100)[0]
+        sdItem = gis.content.search("{} AND owner:{} AND tags:{}".format(service, user, tag), item_type="Service Definition", sort_field="title", sort_order="asc", max_items=100)[0]
     except IndexError:
         sdItem = "no"
         pass
@@ -102,7 +104,7 @@ arcpy.AddMessage("Successfully published services to AGO.")
 # Remove underscores from titles
 arcpy.AddMessage("Removing underscores from titles...")
 # Search and create a list of content
-fc = gis.content.search(query="owner: sross_c_TXDOT AND type: Feature Service",sort_field="title",sort_order="asc", max_items=100 )
+fc = gis.content.search(query="owner: TPP_GIS AND type: Feature Service AND tags: Quarterly",sort_field="title",sort_order="asc", max_items=100 )
 # Loop through item list
 for item in fc:
   title = item.title
@@ -110,6 +112,17 @@ for item in fc:
   arcpy.AddMessage("Changing " + title + " to " + newtitle + "...")
   item.update(item_properties={'title':newtitle})
   print (newtitle)
+
+arcpy.AddMessage("Enabling Export...")
+search_result= gis.content.search("owner: TPP_GIS AND type: Feature Service AND tags: Quarterly", sort_field="title", sort_order="asc", max_items=1000)
+b = 0
+while b < (len(search_result)):
+    item = search_result[b]
+    flc = FeatureLayerCollection.fromitem(item)
+    update_dict = {"capabilities": "Query,Extract"}
+    flc.manager.update_definition(update_dict)
+    arcpy.AddMessage(item)
+    b+=1
 
 number = len(fc)
 arcpy.AddMessage("Finished publishing " + str(number) + " layers!")
