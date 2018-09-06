@@ -23,3 +23,25 @@ with open(r"C:\Users\SROSS-C\Desktop\AgoList\AgoList.csv", "w") as output:
     for item in fc:
         ItemList = [item.title,item.spatialReference, item.accessInformation,item.licenseInfo,item.tags]
         writer.writerow(ItemList)
+
+        
+#Accesseable Information for ItemList variable
+  # item.id
+  # item.owner
+  # item.uploaded
+  # item.title
+  # item.type
+  # item.description
+  # item.tags
+  # item.snippet
+  # item.spatialReference
+  # item.accessInformation
+  # item.access
+  # item.groups
+  # item.numRatings
+  # item.numComments
+  # item.avgRating
+  # item.culture
+  # item.orgId
+
+
