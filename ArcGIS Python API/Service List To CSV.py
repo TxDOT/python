@@ -21,5 +21,5 @@ if not os.path.exists(AgoList):
 with open(r"C:\Users\SROSS-C\Desktop\AgoList\AgoList.csv", "w") as output:
     writer = csv.writer(output, lineterminator='\n')
     for item in fc:
-        ItemList = [item.title,item.accessInformation,item.licenseInfo,item.tags]
+        ItemList = [item.title,item.spatialReference, item.accessInformation,item.licenseInfo,item.tags]
         writer.writerow(ItemList)
