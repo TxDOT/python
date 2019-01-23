@@ -7,7 +7,7 @@ Password = "Password"
 gis = GIS("https://www.arcgis.com", Username, Password)
 
 # Search and create a list of content
-fc = gis.content.search(query="contentstatus: org_authoritative",sort_field="title",sort_order="asc", max_items=100 )
+fc = gis.content.search(query="contentstatus: org_authoritative AND type: Feature Service",sort_field="title",sort_order="asc", max_items=100 )
 
 # Loop through item list
 for item in fc:
