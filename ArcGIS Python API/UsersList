@@ -1,0 +1,30 @@
+from arcgis.gis import GIS
+import csv
+import os
+
+# AGO Credintials
+Username = "Username"
+Password = "Password"
+
+# Create connection
+gis = GIS("https://www.arcgis.com", Username, Password)
+
+# Search and create a list of content
+fc = gis.users.search(query="!esri_", max_users=2000)
+
+#create folder
+AgoList = r'C:\Users\SROSS-C\Desktop\Users'
+if not os.path.exists(AgoList):
+    os.makedirs(AgoList)
+
+#write to csv
+with open(r"C:\Users\SROSS-C\Desktop\Users\Users.csv", "w") as output:
+    writer = csv.writer(output, lineterminator='\n')
+    for user in fc:
+        try:
+            ItemList = [user.firstName, user.lastName, user.username, user.role, user.level, user.email]
+            writer.writerow(ItemList)
+        except AttributeError:
+            ItemList = ["N/A", "N/A", user.username, user.role, user.level, user.email]
+            writer.writerow(ItemList)
+        print (ItemList)
