@@ -1,0 +1,121 @@
+import urllib.request
+import json
+import sys
+import time
+import collections
+
+# Credentials and feature service information
+username = "Username"
+password = "Password"
+
+# Feature server url list
+
+urlList = ("https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Roadway_Inventory_2016/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/Texas_Airport_Boundaries/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/Texas_Airports/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/Texas_Border_Crossings/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/Texas_Cemeteries/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/Texas_Cities/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/Texas_Councils_of_Governments/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/Texas_County_Boundaries/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/Texas_County_Boundaries_Line/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/Texas_County_Boundaries_Detailed/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/Texas_Education_Boundaries/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/Texas_Metropolitan_Planning_Organizations/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/Texas_Military_Boundaries/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/Texas_National_Highway_Freight_Network/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/Texas_NonAttainment_Areas/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/Texas_Railroads/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/Texas_Regional_Mobility_Authorities/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/Texas_State_Boundary/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/Texas_State_Boundary_Detailed/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/Texas_State_House_Districts/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/Texas_State_Senate_Districts/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/Texas_US_House_Districts/FeatureServer/0",
+"https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_AADT_Annuals/FeatureServer/0",
+"https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Acceleration_Deceleration_Lane/FeatureServer/0",
+"https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Access_Control/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Area_Offices/FeatureServer/0",
+"https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Base_Thickness/FeatureServer/0",
+"https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Bridges/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_City_Boundaries/FeatureServer/0",
+"https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Climbing_Passing_Lane/FeatureServer/0",
+"https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Concurrencies/FeatureServer/0",
+"https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Congestion/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Control_Sections/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Districts/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Energy_Sector_Corridors/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Evacuation_Routes/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Functional_Classification/FeatureServer/0",
+"https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Future_Congestion/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Highway_Designations/FeatureServer/0",
+"https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Inside_Curb/FeatureServer/0",
+"https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Inside_Shoulder/FeatureServer/0",
+"https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Inside_Shoulder_Use/FeatureServer/0",
+"https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Inside_Shoulder_Width/FeatureServer/0",
+"https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Maintenance_Section_Routes/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Maintenance_Sections/FeatureServer/0",
+"https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Median/FeatureServer/0",
+"https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Median_Width/FeatureServer/0",
+"https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Memorial_Highways/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_National_Highway_System/FeatureServer/0",
+"https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Number_of_Through_Lanes/FeatureServer/0",
+"https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Offices/FeatureServer/0",
+"https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Outside_Curb/FeatureServer/0",
+"https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Outside_Shoulder/FeatureServer/0",
+"https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Outside_Shoulder_Use/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Permanent_Count_Stations/FeatureServer/0",
+"https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Projects/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Reference_Markers/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Roadway_Inventory_2012/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Roadway_Inventory_2013/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Roadway_Inventory_2014/FeatureServer/0",
+"https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Roadway_Inventory_2015/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Roadway_Inventory_OnSystem/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Roadways_2017/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Seaports/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Speed_Limits/FeatureServer/0",
+"https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Statewide_Connectivity_Corridors/FeatureServer/0",
+"https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_STRAHNET/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Texas_Highway_Freight_Network/FeatureServer/0",
+"https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Texas_Toll_Roads/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Texas_Trunk_System/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Top_100_Congested_Roadways/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Urbanized_Areas/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Vertical_Clearances/FeatureServer/0",
+"https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Roadway_Inventory/FeatureServer/0",
+"http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Roadways/FeatureServer/0")
+
+
+for link in urlList:
+
+    fsURL = link
+
+    # 1: obtain a token
+    referer = "http://www.arcgis.com/"
+    query_dict = {'username': username, 'password': password, 'referer': referer}
+    query_string = urllib.parse.urlencode(query_dict).encode("utf-8")
+    url = "https://www.arcgis.com/sharing/rest/generateToken"
+    token = json.loads(urllib.request.urlopen(url + "?f=json", query_string).read())
+
+    if "token" not in token:
+        print(token['error'])
+        sys.exit(1)
+
+    # 2: request the json data for the feature
+    query_dict = {"f": "json", "token": token['token']}
+    jsonResponse = urllib.request.urlopen(fsURL, urllib.parse.urlencode(query_dict).encode("utf-8"))
+
+    # lastEditDate is in the editingInfo section of the json response
+    # to access other sections, change "editingInfo" to the section name ("types" for example)
+    # using OrderedDict keeps the file ordered as sent by server, but is not necessary
+    jsonOutput = json.loads(jsonResponse.read(),
+                            object_pairs_hook=collections.OrderedDict)[u'editingInfo']
+
+    # 3: extract the data required
+    editTime = int(jsonOutput['lastEditDate']) / 1000
+
+    # print(link)
+    # print (time.strftime('%c', time.localtime(editTime)))
+    # print (time.strftime('%Y', time.localtime(editTime)))
+    print (time.strftime('%b', time.localtime(editTime)))
